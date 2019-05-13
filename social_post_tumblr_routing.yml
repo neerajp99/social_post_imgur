@@ -1,0 +1,26 @@
+social_post_tumblr.settings_form:
+  path: '/admin/config/social-api/social-post/tumblr'
+  defaults:
+    _title: 'Tumblr Settings'
+    _form: 'Drupal\social_post_tumblr\Form\TumblrPostSettingsForm'
+  requirements:
+    _permission: 'administer social api autoposting'
+
+# Routes for authentication
+social_post_tumblr.redirect_to_tumblr:
+  path: '/user/social-post/tumblr/auth'
+  defaults:
+    _controller: 'Drupal\social_post_tumblr\Controller\TumblrPostController::redirectToProvider'
+  requirements:
+    _permission: 'perform tumblr autoposting tasks'
+  options:
+      no_cache: TRUE
+
+social_post_tumblr.callback:
+  path: '/user/social-post/tumblr/auth/callback'
+  defaults:
+    _controller: 'Drupal\social_post_tumblr\Controller\TumblrPostController::callback'
+  requirements:
+    _permission: 'perform tumblr autoposting tasks'
+  options:
+      no_cache: TRUE
