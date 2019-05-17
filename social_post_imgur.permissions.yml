@@ -1,0 +1,3 @@
+perform imgur autoposting tasks:
+  title: 'Perform Imgur autosharing'
+  description: "Perform authosharing tasks in user's Imgur accounts."

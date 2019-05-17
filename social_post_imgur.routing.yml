@@ -1,0 +1,26 @@
+social_post_imgur.settings_form:
+  path: '/admin/config/social-api/social-post/imgur'
+  defaults:
+    _title: 'Imgur Settings'
+    _form: 'Drupal\social_post_imgur\Form\ImgurPostSettingsForm'
+  requirements:
+    _permission: 'administer social api autoposting'
+
+# Routes for authentication
+social_post_imgur.redirect_to_imgur:
+  path: '/user/social-post/imgur/auth'
+  defaults:
+    _controller: 'Drupal\social_post_imgur\Controller\ImgurPostController::redirectToProvider'
+  requirements:
+    _permission: 'perform imgur autoposting tasks'
+  options:
+      no_cache: TRUE
+
+social_post_imgur.callback:
+  path: '/user/social-post/imgur/auth/callback'
+  defaults:
+    _controller: 'Drupal\social_post_imgur\Controller\ImgurPostController::callback'
+  requirements:
+    _permission: 'perform imgur autoposting tasks'
+  options:
+      no_cache: TRUE
