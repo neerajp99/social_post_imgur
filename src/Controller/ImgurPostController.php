@@ -154,50 +154,38 @@ class ImgurPostController extends ControllerBase {
    *
    * Imgur returns the user here after user has authenticated in Imgur.
    */
-  public function callback() {
-    // Checks if user cancel login via Imgur.
-    $error = $this->request->getCurrentRequest()->get('error');
-    if ($error == 'user_cancelled_authorize') {
-      $this->messenger->addError($this->t('You could not be authenticated.'));
-      return $this->redirect('entity.user.edit_form', ['user' => $this->postManager->getCurrentUser()]);
-    }
+   public function callback() {
+   // Checks if user cancel login via Imgur.
+   $error = $this->request->getCurrentRequest()->get('error');
+   if ($error == 'access_denied') {
+     drupal_set_message($this->t('You could not be authenticated.'), 'error');
+     return $this->redirect('user.login');
+   }
 
-    /* @var \League\OAuth2\Client\Provider\Imgur|false $imgur */
-    $imgur = $this->networkManager->createInstance('social_post_imgur')->getSdk();
+   /* @var \League\OAuth2\Client\Provider\Imgur false $imgur */
+   $imgur = $this->networkManager->createInstance('social_post_imgur')->getSdk();
 
-    // If Imgur client could not be obtained.
-    if (!$imgur) {
-      $this->messenger->addError($this->t('Social Auth Imgur not configured properly. Contact site administrator.'));
-      return $this->redirect('user.login');
-    }
+   // If imgur client could not be obtained.
+   if (!$imgur) {
+     drupal_set_message($this->t('Social Auth Imgur not configured properly. Contact site administrator.'), 'error');
+     return $this->redirect('user.login');
+   }
 
-    $state = $this->dataHandler->get('oAuth2state');
-    // Retrieves $_GET['state'].
-    $retrievedState = $this->request->getCurrentRequest()->query->get('state');
-    if (empty($retrievedState) || ($retrievedState !== $state)) {
-      //nullify session keys if the user could not logged in
-      $this->postManager->nullifySessionKeys();
-      $this->messenger->addError($this->t('Imgur login failed. Unvalid OAuth2 state.'));
-      return $this->redirect('user.login');
-    }
+   $state = $this->dataHandler->get('oAuth2State');
 
-    $this->imgurManager->setClient($imgur)->authenticate();
+   // Retrieves $_GET['state'].
+   $retrievedState = $this->request->getCurrentRequest()->query->get('state');
 
-    if (!$imgur_profile = $this->imgurManager->getUserInfo()) {
-      $this->messenger->addError($this->t('Imgur login failed, could not load Imgur profile. Contact site administrator.'));
-      return $this->redirect('user.login');
-    }
+   $this->imgurManager->setClient($imgur)->authenticate();
 
-    if (!$this->postManager->checkIfUserExists($imgur_profile->getId())) {
-      $name = $imgur_profile->getFirstName() . ' ' . $imgur_profile->getLastName();
-      $this->postManager->addRecord($name, $imgur_profile->getId(), $this->imgurManager->getAccessToken());
-      $this->messenger->addStatus($this->t('Account added successfully.'));
-    }
-    else {
-      $this->messenger->addWarning($this->t('You have already authorized to post on behalf of this user.'));
-    }
-
-    return $this->redirect('entity.user.edit_form', ['user' => $this->postManager->getCurrentUser()]);
-  }
+   if (!$imgur_profile = $this->imgurManager->getUserInfo()) {
+     drupal_set_message($this->t('Imgur login failed, could not load Imgur profile. Contact site administrator.'), 'error');
+     return $this->redirect('user.login');
+   }
+   if (!$this->postManager->checkIfUserExists($this->imgurManager->getUserInfo()->getId())) {
+     $this->postManager->addRecord('social_post_imgur', $this->imgurManager->getUserInfo()->getId(), $this->imgurManager->getAccessToken(), $this->imgurManager->getUserInfo()->getName(), '');
+   }
+   return $this->redirect('entity.user.edit_form', ['user' => $this->postManager->getCurrentUser()]);
+ }
 
 }
