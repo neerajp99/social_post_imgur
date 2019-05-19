@@ -10,7 +10,7 @@ social_post_imgur.settings_form:
 social_post_imgur.redirect_to_imgur:
   path: '/user/social-post/imgur/auth'
   defaults:
-    _controller: 'Drupal\social_post_imgur\Controller\ImgurPostController::redirectToProvider'
+    _controller: 'Drupal\social_post_imgur\Controller\ImgurPostController::redirectToImgur'
   requirements:
     _permission: 'perform imgur autoposting tasks'
   options:
