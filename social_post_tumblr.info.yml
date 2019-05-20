@@ -1,8 +1,0 @@
-name: Social Post Tumblr
-type: module
-description: Social Post Integration for Tumblr
-core: 8.x
-package: social_post
-configure: social_post_tumblr.settings_form
-dependencies:
-  - social_post:social_post

@@ -1,4 +1,0 @@
-services:
-  tumblr_post.auth_manager::
-    class: '\Drupal\social_post_tumblr\TumblrPostAuthManager'
-    arguments: ['@session','@request_stack']
