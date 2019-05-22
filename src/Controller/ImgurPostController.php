@@ -139,7 +139,7 @@ class ImgurPostController extends ControllerBase {
     $this->imgurManager->setClient($imgur);
 
     // Generates the URL where the user will be redirected for Imgur login.
-    $imgur_login_url = $this->imgurManager->getImgurUrl();
+    $imgur_login_url = $this->imgurManager->getImgurLoginUrl();
 
     $state = $this->imgurManager->getState();
 
