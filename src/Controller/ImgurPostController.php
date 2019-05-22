@@ -114,9 +114,9 @@ class ImgurPostController extends ControllerBase {
     return new static(
       $container->get('plugin.network.manager'),
       $container->get('social_post.post_manager'),
-      $container->get('imgur_post.auth_manager'),
+      $container->get('imgur_post.social_post_auth_manager'),
       $container->get('request_stack'),
-      $container->get('social_post.data_handler'),
+      $container->get('social_post.social_post_data_handler'),
       $container->get('logger.factory'),
       $container->get('messenger')
     );
