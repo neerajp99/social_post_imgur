@@ -1,4 +1,3 @@
 services:
-  imgur_post.auth_manager::
+  imgur_post.auth_manager:
     class: '\Drupal\social_post_imgur\ImgurPostAuthManager'
-    arguments: ['@session','@request_stack']
