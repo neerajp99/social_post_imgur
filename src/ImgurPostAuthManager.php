@@ -9,7 +9,7 @@ use Drupal\social_post\PostManager;
 /**
  * Manages the authorization process and post on user behalf.
  */
-class ImgurPostAuthManager extends PostManager\PostManager {
+class ImgurPostAuthManager extends PostManager {
   /**
    * The session manager.
    *
